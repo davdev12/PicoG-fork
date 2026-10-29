@@ -30,8 +30,11 @@ direction = 0
 button_pressed = False
 button_left_previous = True
 button_right_previous = True
+<<<<<<< HEAD
 button_up_previous = True
 button_down_previous = True
+=======
+>>>>>>> 8daace4d2d4ad7270c8c41c8d73081e054c31123
 button_left_time = 0
 button_right_time = 0
 
@@ -46,7 +49,11 @@ def game_iteration(t):
     game_step = True
 
 
+<<<<<<< HEAD
 timer.init(freq=4, mode=Timer.PERIODIC, callback=game_iteration)
+=======
+timer.init(freq=8, mode=Timer.PERIODIC, callback=game_iteration)
+>>>>>>> 8daace4d2d4ad7270c8c41c8d73081e054c31123
 
 # Hauptschleife
 while True:
@@ -54,6 +61,7 @@ while True:
     if not button_pressed:  # nur ein Richtungswechsel pro Iteration ist möglich
         button_right = pgb.button_right()
         button_left = pgb.button_left()
+<<<<<<< HEAD
         button_down = pgb.button_down()
         button_up = pgb.button_up()
         
@@ -75,6 +83,19 @@ while True:
             # statt einmal nach links wird dreimal nach rechts abgebogen → Rollover mit Modulo funktioniert auch hier
             direction = 2
             button_pressed = True
+=======
+        if button_right and not button_right_previous:
+            direction = (direction + 1) % 4  # Rollover über Modulo
+            button_pressed = True
+        button_right_previous = button_right
+
+        if button_left and not button_left_previous:
+            # statt einmal nach links wird dreimal nach rechts abgebogen → Rollover mit Modulo funktioniert auch hier
+            direction = (direction + (4 - 1)) % 4
+            button_pressed = True
+        button_left_previous = button_left
+
+>>>>>>> 8daace4d2d4ad7270c8c41c8d73081e054c31123
     # Spieliteration
     if game_step:  # Iteration nur, wenn die entsprechende Zeit abgelaufen ist
         # Richtung in x- und y-Komponenten zerlegen
