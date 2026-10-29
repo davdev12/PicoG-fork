@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" media="screen" href="assets/css/style.css">
+    <title>Programmierung</title>
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.png">
+</head>
+
+<body>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+
+            <h1 id="project_title">PicoGame</h1>
+            <h2 id="project_tagline">Minimale Spielekonsole der SPE Karlsruhe auf Basis des Raspberry Pi Pico</h2>
+
+
+        </header>
+    </div>
+
+    <div id="main_content_wrap" class="outer">
+        <section id="main_content" class="inner">
+            <iframe src="table_of_contents.html"
+                onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>
+            <h1>Programmierung</h1>
+            <p>Für die korrekte Funktion muss nun der Microcontroller programmiert werden. Zunächst wird die aktuelle
+                Firmware benötigt, diese kann <a href="https://micropython.org/download/rp2-pico/">hier</a>
+                heruntergeladen werden. Der Taster auf dem Microcontroller wird gedrückt gehalten, während dieser mit
+                einem Micro-USB-Kabel an einen Computer angeschlossen wird. Der Computer erkennt den Microcontroller als
+                Speichermedium, darauf muss die Firmware-Datei kopiert werden. Der Mikrocontroller trennt daraufhin
+                automatisch die Verbindung zum Computer und startet sich neu.</p>
+
+            <p>Nun muss noch das Python-Programm für die Spiele auf den Microcontroller geladen werden. Dazu wird das
+                Programm <a href="https://thonny.org/">Thonny</a> verwendet. Das Python-Programm kann hier als zip-Archiv heruntergeladen werden:</p>
+            <a href="https://github.com/spe-khe/PicoG/archive/refs/heads/main.zip">PicoGame-main.zip</a>
+            <p>Dieses Archiv wird an einem beliebigen Ort entpackt.</p>
+            <p> Zunächst muss in Thonny die Verbindung zum Mikrocontroller hergestellt werden. Dazu wird in der unteren
+                rechten Ecke auf "Thonnys Python" geklickt und "MicroPython (Raspberry Pi Pico)" ausgewählt: </p>
+            <img src="assets/images/selectInterpreter.png" alt="Raspberry Pi Pico in Thonny auswählen">
+            <p> Jetzt kann in Thonny in den Ordner navigiert werden, in den zuvor das Programm entpackt wurde. Dazu wird
+                der "Dateien"-Bereich am linken Rand des Fensters verwendet. Fehlt der Bereich, muss er zunächst unter
+                "Ansicht" aktiviert werden.</p>
+            <img src="assets/images/enableFiles.png">
+            <p>Nun werden alle Dateien (aber keine Unterordner) in dem Ordner markiert und per Rechtsklick "Upload nach
+                /" ausgewählt. Thonny lädt das Programm jetzt auf den Mikrocontroller hoch, sodass es beim nächsten
+                Start ausgeführt wird. </p>
+            <img src="assets/images/upload.png">
+            <div id="navigation">
+                <a href="assembly.html">
+                    <div id="navigation_left" class="nav_prev">
+                        << Aufbau</div>
+                </a>
+                <a href="game_development_1.html">
+                    <div id="navigation_right" class="nav_next">Spieleentwicklung >></div>
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+        <footer class="inner">
+
+            <p class="copyright">LED-Gadget maintained by <a href="https://github.com/spe-khe">spe-khe</a></p>
+
+            <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+        </footer>
+    </div>
+</body>
+
+</html>

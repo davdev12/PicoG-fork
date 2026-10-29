@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" media="screen" href="assets/css/style.css">
+    <title>Einführung</title>
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.png">
+</head>
+
+<body>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+
+            <h1 id="project_title">PicoGame</h1>
+            <h2 id="project_tagline">Minimale Spielekonsole der SPE Karlsruhe auf Basis des Raspberry Pi Pico</h2>
+
+
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+        <section id="main_content" class="inner">
+            <a href="assembly.html">
+                <div style="padding:0.5em;border-radius:0.5em;background-color:#ffbebe;border: solid red;">Hier
+                    geht es direkt zur Aufbauanleitung!
+                </div>
+            </a>
+            <p>Diese Website beschreibt unsere PicoGame-Spielekonsole. Dazu ist sie in mehrere Seiten unterteilt, die
+                verschiedene Aspekte behandeln. Zur Navigation
+                kannst du die Buttons am unteren Ende der Seite benutzen, oder du springst hier direkt zu einer der
+                Seiten:</p>
+
+            <iframe src="table_of_contents.html"
+                onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>
+            <h1 id="einführung">Einführung</h1>
+            <p>Die Konsole ist inspiriert vom Nintendo GameBoy und basiert auf einem ähnlichen Projekt von <a
+                    href="https://www.youmaketech.com/raspberry-pi-pico-gameboy/">YouMakeTech</a></p>
+
+            <p>Herz der Konsole ist ein Raspberry Pi Pico, ein Microcontroller, der in der Programmiersprache Python
+                programmiert ist. Der Microcontroller erkennt die Tastendrucke und steuert das auf dem Display
+                angezeigte Bild entsprechend. Es sind fünf Spiele vorprogrammiert, zwischen denen gewählt werden kann:
+            </p>
+            <ul>
+                <li>Tetris</li>
+                <li>Conway's Game of Life</li>
+                <li>Flappy Bird</li>
+                <li>Hungry Rain</li>
+                <li>Snake</li>
+            </ul>
+
+            <p>Doch zuächst muss die Konsole zusammengebaut werden. Wie das geht, wird auf der nächsten Seite beschrieben.
+            </p>
+
+            <div id="navigation">
+                <a href="assembly.html">
+                    <div id="navigation_right" class="nav_next">Aufbau >></div>
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+        <footer class="inner">
+
+            <p class="copyright">LED-Gadget maintained by <a href="https://github.com/spe-khe">spe-khe</a></p>
+
+            <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+        </footer>
+    </div>
+</body>
+
+</html>

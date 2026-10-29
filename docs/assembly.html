@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" media="screen" href="assets/css/style.css">
+    <title>Aufbau</title>
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.png">
+</head>
+
+<body>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+
+            <h1 id="project_title">PicoGame</h1>
+            <h2 id="project_tagline">Minimale Spielekonsole der SPE Karlsruhe auf Basis des Raspberry Pi Pico</h2>
+
+
+        </header>
+    </div>
+
+    <div id="main_content_wrap" class="outer">
+        <section id="main_content" class="inner">
+            <iframe src="table_of_contents.html"
+                onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>
+            <p>Dieser Teil der Anleitung ist <a href="assembly_videos.html">hier</a> auch in Videoform verfügbar</p>
+            <h1 id="aufbau">Aufbau</h1>
+            <p>Die Konsole besteht aus den folgenden Bauteilen:</p>
+            <ul>
+                <li>Platine</li>
+                <li>Raspberry Pi Pico</li>
+                <li>Taster</li>
+                <li>Display</li>
+                <li>Gehäuse</li>
+            </ul>
+
+            <img src="assets/images/assembly/components.png" alt="Komponenten">
+
+            <p>Diese Bauteile müssen korrekt verdrahtet bzw. miteinander verbunden werden, damit die entsprechenden
+                Funktionen gegeben sind. Diese Aufgabe übernimmt die Platine für uns. Auf ihr befinden sich
+                Leiterbahnen,
+                die die Verbindungen zwischen den Modulen und dem Mikrocontroller herstellen.</p>
+
+            <p style="color: red; font-style: italic;">Achtung: Es ist wichtig, dass alle Bauteile auf der richtigen
+                Seite der Platine verlötet werden. Auf der Platine ist jeweils an der entsprechenden Stelle der Umriss
+                des Bauteils aufgedruckt.</p>
+
+            <p>Als erstes werden die Stiftleisten für den Mikrocontroller auf die Platine gelötet. Dazu werden diese
+                mit dem langen Ende durch die Platine gesteckt und der Microcontroller zur Stabilisierung aufgesteckt.
+            </p>
+            <img src="assets/images/assembly/picoPin1.JPG" alt="Stiftleisten aufstecken">
+            <p> Das Ganze wird umgedreht und auf der Rückseite verlötet. Anschließend wird der Microcontroller wieder
+                abgezogen.</p>
+            <img src="assets/images/assembly/picoPin2.png" alt="Stiftleisten verlöten">
+
+            <p> Nun werden die sechs Taster durch die Platine gesteckt und auf der Rückseite verlötet.</p>
+            <img src="assets/images/assembly/but1.JPG" alt="Taster aufstecken">
+            <img src="assets/images/assembly/but2.JPG" alt="Taster verlöten">
+
+            <p> Der Microcontroller wird wieder auf die Stiftleisten gesteckt, dabei muss auf die richtige Ausrichtung
+                geachtet werden: Der USB-Anschluss zeigt nach oben und von der Platine weg.</p>
+            <img src="assets/images/assembly/pico1.JPG" alt="Richtige Ausrichtung des Picos">
+            <p> Nun kann der Microcontroller mit den Stiftleisten verlötet werden.</p>
+            <img src="assets/images/assembly/pico2.JPG" alt="Verlöten des Picos">
+
+            <p>Jetzt fehlt nur noch das Display: Dieses wird ebenfalls über Stiftleisten mit der Platine verbunden, die
+                zunächst mit einem Seitenschneider auf die richtige Länge gekürzt werden müssen.</p>
+            <img src="assets/images/assembly/LCDPin1.png" alt="LCD-Stiftleisten kürzen">
+            <p>Diese Stiftleisten werden mit der kurzen Seite durch die Platine gesteckt und auf der Rückseite verlötet.
+            </p>
+            <img src="assets/images/assembly/LCDPin2.JPG" alt="LCD-Stiftleisten verlöten">
+            <p>Das Display wird nun mit vier Schrauben an der Platine fixiert und dann mit der Stiftleisten verlötet.
+            </p>
+            <img src="assets/images/assembly/LCDScrews.JPG" alt="Schrauben zur Befestigung des LCDs">
+            <img src="assets/images/assembly/LCDPin3.png" alt="Verlöten des LCDs">
+
+            <p>Nun kann die Platine in das Gehäuse eingesetzt werden.<!-- TODO: Details --></p>
+
+            <h2>Gehäuse</h2>
+
+            <p>Zuerst werden die Schrauben durch die Vorderseite des Gehäuses gesteckt und das Ganze umgekehrt auf den Tisch gelegt.
+                Die Knöpfe werden in die Vorderseite eingelegt.</p>
+            <img src="assets/images/assembly/housing/DSC_0082.JPG" alt="Vorderseite mit Schrauben und Knöpfen">
+            <p> Auf die Schrauben werden die längeren (9 mm) Abstandshalter gesteckt. Dann wird die Platine eingelegt, dabei müssen
+                die Taster auf der Platine mit den 3D-gedruckten Knopfeinsätzen übereinstimmen. Anschließend werden die kürzeren (7 mm)
+                Abstandshalter auf die Schrauben gesteckt.</p>
+            <img src="assets/images/assembly/housing/DSC_0083.JPG"
+                alt="Seitenansicht der Schrauben: Zuerst sind die langen Abstandshalter, dann die Platine und dann die kurzen Abstandshalter aufgesteckt">
+            <p>Nun werden die Seitenwände eingesetzt. Eine der Wände hat eine Aussparung, diese muss mit dem USB-Anschluss am
+                Mikrocontroller übereinstimmen.</p>
+            <img src="assets/images/assembly/housing/DSC_0084.JPG" alt="eingesetzte Seitenwände, die Aussparung liegt über dem USB-Anschluss">
+            <p>Jetzt wird die Rückseite des Gehäuses aufgelegt. Auch die Rückwand hat eine Aussparung, die über dem USB-Anschluss
+                liegt. Zum Abschluss wird auf jede Schraube eine Unterlegscheibe und eine Mutter geschraubt, ohne dabei das Gehäuse vom
+                Tisch hochzunehmen.</p>
+            <img src="assets/images/assembly/housing/DSC_0085.JPG" alt="Detailaufnahme von Unterlegscheibe und Mutter">
+            <p>Damit ist das Gehäuse fertig gebaut und kann programmiert werden. Dieser Vorgang ist auf der nächsten Seite beschrieben.</p>
+            <img src="assets/images/assembly/housing/DSC_0086.JPG" alt="Großaufnahme des fertigen Gadgets">
+
+
+            <div id="navigation">
+                <a href="index.html">
+                    <div id="navigation_left" class="nav_prev">
+                        << Einführung</div>
+                </a>
+                <a href="programming.html">
+                    <div id="navigation_right" class="nav_next">Programmierung >></div>
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+        <footer class="inner">
+
+            <p class="copyright">LED-Gadget maintained by <a href="https://github.com/spe-khe">spe-khe</a></p>
+
+            <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+        </footer>
+    </div>
+</body>
+
+</html>

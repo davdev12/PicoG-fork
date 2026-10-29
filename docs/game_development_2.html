@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" media="screen" href="assets/css/style.css">
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+
+    <title>Spieleentwicklung</title>
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.png">
+</head>
+
+<body>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+
+            <h1 id="project_title">PicoGame</h1>
+            <h2 id="project_tagline">Minimale Spielekonsole der SPE Karlsruhe auf Basis des Raspberry Pi Pico</h2>
+
+
+        </header>
+    </div>
+
+    <div id="main_content_wrap" class="outer">
+        <section id="main_content" class="inner">
+            <iframe src="table_of_contents.html"
+                onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>
+            <h1>Entwicklung eines eigenen Spiels</h1>
+            <p>Um die Snake zu steuern, müssen wir in unserer Hauptschleife den Zustand der Taster abfragen. Diese Abfrage soll
+                kontinuierlich passieren, also müssen wir sie außerhalb der <code>if game_step:</code>-Anweisung platzieren. Ist der
+                rechte Taster betätigt, wird die direction-Variable um 1 erhöht, beim linken Taster um 1 verringert. Dabei wird
+                zusätzlich sichergestellt, dass das Intervall von 0 bis 3 nicht verlassen wird.</p>
+                <pre><code class="language-python">    if pgb.button_left():
+        direction = (direction + 1) % 4
+    elif pgb.button_right():
+        direction = (direction + (4-1)) % 4</code></pre>
+            <p>Beim Testen fällt auf, dass die Steuerung so sehr schwierig zu bedienen ist. Da die Abfrage sehr schnell immer wieder
+                durchgeführt wird, ist es fast unmöglich, die Taster nur für einen Durchlauf zu betätigen. So wechselt die Snake bei
+                jedem Tastendruck mehrfach die Richtung. Wir wollen also erreichen, dass die Richtung einmal bei Betätigung des Tasters
+                geändert wird und dann erst wieder, wenn der Taster zwischendurch losgelassen wird. Dazu definieren wir zwei neue
+                Variablen, in denen der Zustand der Taster im letzten Durchlauf gespeichert wird. Nur wenn der Taster betätigt ist und
+                in der letzten Durchlauf nicht betätigt war, wird die Richtung geändert.</p>
+<pre><code class="language-python">    button_right = pgb.button_right()
+    button_left = pgb.button_left()
+
+    if button_right and not button_right_previous:
+        direction = (direction + 1) % 4  # Rollover über Modulo
+    button_right_previous = button_right
+
+    if button_left and not button_left_previous:
+        # statt einmal nach links wird dreimal nach rechts abgebogen → Rollover mit Modulo funktioniert auch hier
+        direction = (direction + (4 - 1)) % 4
+    button_left_previous = button_left
+</code></pre>
+        <p>Durch diese Änderung wird die Snake sehr viel einfacher zu steuern. Bei schnellem Betätigen der Taster ist es
+            allerdings noch möglich, mehrfach pro Spieliteration die Richtung zu ändern, sodass die Snake auf der Stelle umkehrt
+            und so direkt mit sich selbst kollidiert. Um dies zu verhindern, wird noch eine Abfragevariable eingebaut, in der
+            gespeichert wird, ob während der aktuellen Iteration schon die Richtung geändert wurde. Diese Abfragevariable wird in
+            jeder Spieliteration einmal wieder zurückgesetzt.</p>
+<pre><code class="language-python">    if not button_pressed:  # nur ein Richtungswechsel pro Iteration ist möglich
+        button_right = pgb.button_right()
+        button_left = pgb.button_left()
+        
+        if button_right and not button_right_previous:
+            direction = (direction + 1) % 4  # Rollover über Modulo
+            button_pressed = True
+        button_right_previous = button_right
+
+        if button_left and not button_left_previous:
+            # statt einmal nach links wird dreimal nach rechts abgebogen → Rollover mit Modulo funktioniert auch hier
+            direction = (direction + (4 - 1)) % 4
+            button_pressed = True
+        button_left_previous = button_left</code></pre>
+        <p>Nun muss noch die Interaktion der Snake mit sich selbst und dem Futter implementiert werden.</p>
+
+
+
+
+
+
+
+            <div id="navigation">
+                <a href="game_development_1.html">
+                    <div id="navigation_left" class="nav_prev">
+                        << Grundfunktionen</div>
+
+                    <a href="game_development_3.html">
+                        <div id="navigation_right" class="nav_next">Interaktion >></div>
+                    </a>
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+        <footer class="inner">
+
+            <p class="copyright">LED-Gadget maintained by <a href="https://github.com/spe-khe">spe-khe</a></p>
+
+            <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+        </footer>
+    </div>
+</body>
+
+</html>

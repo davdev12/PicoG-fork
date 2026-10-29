@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" media="screen" href="assets/css/style.css">
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+
+    <title>Spieleentwicklung</title>
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.png">
+</head>
+
+<body>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+
+            <h1 id="project_title">PicoGame</h1>
+            <h2 id="project_tagline">Minimale Spielekonsole der SPE Karlsruhe auf Basis des Raspberry Pi Pico</h2>
+
+
+        </header>
+    </div>
+
+    <div id="main_content_wrap" class="outer">
+        <section id="main_content" class="inner">
+            <iframe src="table_of_contents.html"
+                onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>
+            <h1>Entwicklung eines eigenen Spiels</h1>
+            <p>Durch die Entwicklung eines eigenen Spiels kann die Spielekonsole einfach erweitert werden. Dazu wird hier
+                beispielhaft das klassische Spiel "<a href="https://de.wikipedia.org/wiki/Snake_(Computerspiel)">Snake</a>" entwickelt.
+                Dazu wird eine neue Datei in Thonny angelegt, die mit "g_" beginnt und die Dateiendung ".py" hat (Hier "g_Snake.py").
+                </p>
+            <p>Zunächst werden die benötigten Bibliotheken importiert. Auf jeden Fall benötigt wird die Bibliothek "PicoGameBoy",
+                die die Ansteuerung von Display und Knöpfen für uns übernimmt. Um das Futter zufällig auf dem Spielfeld zu
+                platzieren, benötigen wir "randint" aus der Bibliothek "random". Außerdem wollen wir durch eine Timer-Funktion die Snake
+                in regelmäßigen Abständen bewegen, dazu benötigen wir "Timer" aus der Bibliothek "machine".</p>
+            <pre><code class="language-python">from PicoGameBoy import PicoGameBoy
+from random import randint
+from machine import Timer</code></pre>
+            <p>Nun muss ein Objekt aus der PicoGameBoy Bibliothek initialisiert werden. Über dieses Objekt, das wir "pgb" nennen,
+                steuern wir dann die Hardware der Konsole an.</p>
+            <pre><code class="language-python">pgb = PicoGameBoy()</code></pre>
+
+            <p>Das verbaute Display hat eine Auflösung von 240x240 Pixeln. Für unser Spiel benötigen wir keine so große Auflösung,
+                deswegen wird das Spielfeld in Quadrate von jeweils 10x10 Pixeln unterteilt. Diesen Faktor speichern wir in der
+                Konstante "PIXEL_FACTOR". Mit dieser Konstante können wir aus den Pixelanzahlen berechnen, wie viele dieser Blöcke es
+                in Höhe und Breite gibt. Auch das speichern wir zunächst in Variablen ab. So können wir im Weiteren immer mit den
+                Koordinaten der einzelnen Blöcke arbeiten, ohne direkt die Pixel zu berücksichtigen.</p>
+            <pre><code class="language-python">PIXEL_FACTOR = 10
+
+GAME_WIDTH = int(pgb.width / PIXEL_FACTOR)
+GAME_HEIGHT = int(pgb.height / PIXEL_FACTOR)</code></pre>
+
+            <p>Als nächstes können wir uns überlegen, welche Variablen wir brauchen, um den aktuellen Status des Spiels zu
+                speichern. Zunächst ist das die Position der Snake. Diese speichern wir als Liste von jeweils x- und y-Koordinaten
+                ab. Dabei ist der Kopf der Snake am Ende dieser Liste. Zu Beginn enthält die Liste nur einen Satz von Koordinaten,
+                nämlich die Mitte des Spielfelds.<br>
+                Außerdem benötigen wir die Koordinaten, an denen das Futter liegt. Auch hier werden x- und y-Koordinaten gespeichert.<br>
+                Wenn das Futter erreicht wurde, müssen diese Koordinaten zufällig neu generiert werden und die Snake wachsen. Dazu
+                wird in einer Boolean-Variable abgespeichert, ob dies der Fall ist.<br>
+                Als letzte Variable wird gespeichert, in welche Richtung sich die Snake bewegt. Dies wird als Ganzzahl gespeichert.
+                Dabei ist 0 oben, die restlichen Richtungen sind im Uhrzeigersinn durchnummeriert.</p>
+            <pre><code class="language-python">snake = [[int(GAME_WIDTH / 2), int(GAME_HEIGHT / 2)]]
+
+reward = [0, 0]
+reward_captured = True
+
+direction = 0</code></pre>
+            
+            <p>Nun können wir uns Gedanken um den Spielablauf machen: Das Bild soll mit einer Frequenz von 4 Hz aktualisiert werden.
+                Dies steuern wir mit einem Timer, den wir zunächst definieren müssen. Bei jedem Ablauf des Timers wird eine Funktion
+                aufgerufen, die eine Variable "game_step" auf "True" setzt. Auch diese Variable und Funktion müssen definiert werden.</p>
+            <pre><code class="language-python">timer = Timer()
+
+game_step = False
+
+
+def game_iteration(t):
+    global game_step
+    game_step = True
+
+timer.init(freq=4, mode=Timer.PERIODIC, callback=game_iteration)
+                </code></pre>
+            <p>Der hauptsächliche Spielablauf passiert in einer <code>while True:</code>-Schleife, also einer Endlosschleife. Diese
+                wird so schnell wie möglich immer wieder wiederholt. Nur wenn die Variable "game_step" True ist, wird das Bild im
+                Schleifendurchlauf aktualisiert. Der Ablauf sieht also so aus:</p>
+            <pre><code class="language-python">while True:
+    if game_step:
+        # Bild aktualisieren
+            </code></pre>
+            <p>Zum Aktualisieren des Bildes müssen wir zunächst die Richtungs-Variable auswerten. Dazu zerlegen wir sie in x- und y-
+                Komponente und setzen diese je nach Wert der Richtungs-Variable auf 0, 1 oder -1.</p>
+            <pre><code class="language-python">        if direction == 0:
+            dir_x = 0
+            dir_y = -1
+        elif direction == 1:
+            dir_x = 0
+            dir_y = 1
+        elif direction == 2:
+            dir_x = 1
+            dir_y = 0
+        else:
+            dir_x = -1
+            dir_y = 0</code></pre>
+            <p>Diese Komponenten können wir nun zu den Koordinaten des Schlangenkopfes dazurechnen, um die neuen Koordinaten des
+                Schlangenkopfes zu ermitteln. Wird der Spielfeldrand überschritten, werden die Koordinaten auf den gegenüberliegenden
+                Spielfeldrand gesetzt. Ein Koordinatenpaar mit diesen Koordinaten hängen wir dann an das Ende der Snake-Liste an.
+                </p>
+            <pre><code class="language-python">        snake_head_x = snake[-1][0] + dir_x
+        snake_head_y = snake[-1][1] + dir_y
+
+        if snake_head_x < 0:
+            snake_head_x = GAME_WIDTH - 1
+        elif snake_head_x >= GAME_WIDTH:
+            snake_head_x = 0
+
+        if snake_head_y < 0:
+            snake_head_y = GAME_HEIGHT - 1
+        elif snake_head_y >= GAME_HEIGHT:
+            snake_head_y = 0
+
+        snake.append([snake_head_x, snake_head_y])</code></pre>
+            <p>Nun müssen wir die Snake noch auf dem Display anzeigen. Um den Code übersichtlicher zu machen, definieren wir uns
+                dafür drei Farben am Anfang der Datei:</p>
+            <pre><code class="language-python">BLACK = PicoGameBoy.color(0, 0, 0)
+WHITE = PicoGameBoy.color(255, 255, 255)
+RED = PicoGameBoy.color(255, 0, 0)</code></pre>
+            <p>Zuerst wird das Display komplett mit schwarz gefüllt, um das letzte Bild zu löschen. Dann wird die Snake
+                durchgegangen und jeweils an der definierten Stelle ein Quadrat auf das Display gezeichnet. Zuletzt wird das
+                generierte Bild angezeigt.</p>
+            <pre><code class="language-python">        pgb.fill(BLACK)
+        for pixel in snake:
+            pgb.fill_rect(pixel[0]*PIXEL_FACTOR+1, pixel[1]*PIXEL_FACTOR+1, PIXEL_FACTOR-2, PIXEL_FACTOR-2, WHITE)
+        pgb.show()</code></pre>
+            <p>Als letztes wird die Variable game_step wieder auf False gesetzt, damit die nächste Aktualisierung erst nach dem
+                nächsten Auslösen des Timers ausgeführt wird.</p>
+            <p>Damit sieht unsere Datei nun so aus:</p>
+            <pre><code class="language-python">from PicoGameBoy import PicoGameBoy
+from random import randint
+from machine import Timer
+
+BLACK = PicoGameBoy.color(0, 0, 0)
+WHITE = PicoGameBoy.color(255, 255, 255)
+RED = PicoGameBoy.color(255, 0, 0)
+
+pgb = PicoGameBoy()
+
+# Konstanten für die Unterteilung des Displays in größere Pixel
+PIXEL_FACTOR = 10
+
+GAME_WIDTH = int(pgb.width / PIXEL_FACTOR)
+GAME_HEIGHT = int(pgb.height / PIXEL_FACTOR)
+
+# Snake als Liste von Koordinaten, startet in der Mitte des Spielfelds
+snake = [[int(GAME_WIDTH / 2), int(GAME_HEIGHT / 2)]]
+
+# Position des Futters
+reward = [0, 0]
+reward_captured = True
+
+# aktuelle Richtung: 0 ist oben, dann im Uhrzeigersinn durchnummeriert
+direction = 0
+
+# Zur Steuerung der regelmäßigen Iteration
+timer = Timer()
+game_step = False
+
+
+def game_iteration(t):
+    # Funktion zur Aktivierung der nächsten Spieliteration 
+    global game_step
+    game_step = True
+
+
+timer.init(freq=4, mode=Timer.PERIODIC, callback=game_iteration)
+
+# Hauptschleife
+while True:
+    if game_step:  # Iteration nur, wenn die entsprechende Zeit abgelaufen ist
+        # Richtung in x- und y-Komponenten zerlegen
+        if direction == 0:
+            dir_x = 0
+            dir_y = -1
+        elif direction == 1:
+            dir_x = 0
+            dir_y = 1
+        elif direction == 2:
+            dir_x = 1
+            dir_y = 0
+        else:
+            dir_x = -1
+            dir_y = 0
+
+        # neue Koordinaten für Schlangenkopf
+        snake_head_x = snake[-1][0] + dir_x
+        snake_head_y = snake[-1][1] + dir_y
+
+        if snake_head_x < 0:
+            snake_head_x = GAME_WIDTH - 1
+        elif snake_head_x >= GAME_WIDTH:
+            snake_head_x = 0
+
+        if snake_head_y < 0:
+            snake_head_y = GAME_HEIGHT - 1
+        elif snake_head_y >= GAME_HEIGHT:
+            snake_head_y = 0
+
+        # neuen Schlangenkopf ans Ende der Snake hängen
+        snake.append([snake_head_x, snake_head_y])
+
+        # Display aktualisieren
+        pgb.fill(BLACK) # clear
+        for pixel in snake: # Snake zeichnen
+            pgb.fill_rect(pixel[0] * PIXEL_FACTOR, pixel[1] * PIXEL_FACTOR, PIXEL_FACTOR, PIXEL_FACTOR, WHITE)
+        pgb.show()  # Alles anzeigen
+
+        game_step = False
+                
+                </code></pre>
+            <p>Diese Datei können wir nun schonmal auf der Spielekonsole testen:</p>
+            <img src="assets/videos/dev1.gif" alt="Die Snake bewegt sich dauerhaft nach oben, dabei wächst sie die ganze Zeit">
+            <p>Die grundlegenden Funktionen funktionieren schon wie gewollt: Die Snake bewegt sich in regelmäßigen Zeitabständen und
+                wenn sie das Spielfeld am oberen Rand verlässt, taucht sie am unteren wieder auf. Sie wächst dabei allerdings noch
+                kontinuierlich und wir können sie nicht steuern. Das wollen wir auf den nächsten Seiten ändern.</p>
+
+            <div id="navigation">
+                <a href="programming.html">
+                    <div id="navigation_left" class="nav_prev">
+                        << Programmierung</div>
+                </a>
+                <a href="game_development_2.html">
+                    <div id="navigation_right" class="nav_next">Steuerung >></div>
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+        <footer class="inner">
+
+            <p class="copyright">LED-Gadget maintained by <a href="https://github.com/spe-khe">spe-khe</a></p>
+
+            <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+        </footer>
+    </div>
+</body>
+
+</html>
